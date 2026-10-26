@@ -1,0 +1,585 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Alessio Novel</title>
+<meta name="description" content="Alessio Novel — M.Sc. student in Artificial Intelligence at the University of Trento, working at the intersection of machine learning and neuroscience.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one calm reading column; each section has a mono label rail on the left (stacks on phones).
+   Hero signature: a representational dissimilarity matrix (RSA) drawn in purples — the tool of his research. */
+:root {
+  --bg: #fbf9fd;
+  --surface: #f3eef9;
+  --fg: #1e1828;
+  --muted: #6b6178;
+  --line: #e4dcee;
+  --accent: #6d28a8;
+  --accent-soft: #ede3f7;
+  --display: "Instrument Serif", "Iowan Old Style", Georgia, serif;
+  --body: "Hanken Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #141019; --surface: #1d1725; --fg: #ece6f3; --muted: #a497b4;
+    --line: #2d2438; --accent: #c39bf0; --accent-soft: #2a1f39; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #141019; --surface: #1d1725; --fg: #ece6f3; --muted: #a497b4;
+  --line: #2d2438; --accent: #c39bf0; --accent-soft: #2a1f39; color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { animation: none !important; transition: none !important; } }
+body {
+  margin: 0; background: var(--bg); color: var(--fg);
+  font-family: var(--body); font-size: 1.0625rem; line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+a:hover { text-decoration-thickness: 2px; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 3px; }
+
+.wrap {
+  max-width: 960px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+
+/* nav */
+nav { padding-block: 22px; }
+nav .wrap { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
+.mark { font-family: var(--display); font-size: 1.5rem; color: var(--fg); text-decoration: none; }
+.mark span { color: var(--accent); }
+nav ul { list-style: none; display: flex; gap: 22px; margin: 0; padding: 0; flex-wrap: wrap; }
+nav ul a { font-family: var(--mono); font-size: .78rem; letter-spacing: .06em; text-transform: lowercase; color: var(--muted); text-decoration: none; }
+nav ul a:hover { color: var(--accent); }
+
+/* hero */
+.hero { padding-block: 56px 72px; }
+.hero .wrap { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 56px; align-items: center; }
+.eyebrow { font-family: var(--mono); font-size: .78rem; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); margin: 0 0 18px; }
+h1 {
+  font-family: var(--display); font-weight: 400; font-size: clamp(3.2rem, 9vw, 6rem);
+  line-height: .95; letter-spacing: -.01em; margin: 0 0 24px; text-wrap: balance;
+}
+h1 em { color: var(--accent); }
+.lede { font-size: 1.2rem; color: var(--muted); max-width: 34ch; margin: 0 0 28px; }
+.lede strong { color: var(--fg); font-weight: 500; }
+.actions { display: flex; flex-wrap: wrap; gap: 12px; }
+.btn {
+  display: inline-flex; align-items: center; gap: 8px; padding: 11px 18px; border-radius: 999px;
+  font-family: var(--body); font-weight: 500; font-size: .95rem; text-decoration: none;
+  border: 1px solid var(--line); color: var(--fg); background: transparent; cursor: pointer;
+  transition: border-color .2s, background .2s;
+}
+.btn:hover { border-color: var(--accent); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+.btn.primary:hover { filter: brightness(1.08); }
+.btn svg { width: 16px; height: 16px; fill: currentColor; }
+
+.figure { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.portrait {
+  width: 220px; height: 220px; border-radius: 50%; display: grid; place-items: center;
+  background: var(--accent-soft); color: var(--accent); font-family: var(--display); font-size: 4.5rem;
+  overflow: hidden; border: 1px solid var(--line);
+}
+.portrait img { width: 100%; height: 100%; object-fit: cover; }
+.rdm { display: grid; grid-template-columns: repeat(12, 1fr); gap: 2px; width: 220px; max-width: 100%; }
+.rdm i { aspect-ratio: 1; border-radius: 2px; background: var(--accent); }
+.figcap { font-family: var(--mono); font-size: .68rem; color: var(--muted); letter-spacing: .04em; text-align: center; }
+
+/* sections */
+section { padding-block: 56px; border-top: 1px solid var(--line); }
+section .wrap { display: grid; grid-template-columns: 180px minmax(0, 1fr); gap: 40px; }
+.label { font-family: var(--mono); font-size: .78rem; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); padding-top: 6px; }
+h2 { font-family: var(--display); font-weight: 400; font-size: 2.2rem; line-height: 1.1; margin: 0 0 20px; text-wrap: balance; }
+h3 { font-family: var(--body); font-weight: 600; font-size: 1.12rem; line-height: 1.35; margin: 0; }
+p { margin: 0 0 1em; max-width: 65ch; }
+.content > :last-child { margin-bottom: 0; }
+
+.interests { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; padding: 0; margin: 20px 0 0; }
+.interests li { padding: 6px 14px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: .92rem; font-weight: 500; }
+
+/* timeline entries */
+.entries { display: flex; flex-direction: column; gap: 40px; }
+.entry { display: grid; grid-template-columns: minmax(0, 1fr); gap: 6px; }
+.entry-head { display: flex; justify-content: space-between; align-items: baseline; gap: 6px 20px; flex-wrap: wrap; }
+.when { font-family: var(--mono); font-size: .8rem; color: var(--muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.where { color: var(--muted); font-size: .98rem; }
+.where b { color: var(--fg); font-weight: 500; }
+.entry ul { margin: 8px 0 0; padding-left: 1.1em; max-width: 65ch; }
+.entry li { margin-bottom: 6px; }
+.entry li::marker { color: var(--accent); }
+.grade {
+  display: inline-flex; align-items: baseline; gap: 6px; margin-top: 8px; width: fit-content;
+  font-family: var(--mono); font-size: .8rem; color: var(--accent);
+  border: 1px solid var(--line); border-radius: 6px; padding: 4px 10px;
+}
+.grade b { font-size: .95rem; font-weight: 500; }
+.now { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); margin-right: 6px; vertical-align: 1px; animation: pulse 2.4s ease-in-out infinite; }
+@keyframes pulse { 50% { opacity: .35; } }
+
+/* projects */
+.featured { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 28px; margin-bottom: 28px; }
+.featured .tag { font-family: var(--mono); font-size: .72rem; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+.stats { display: flex; flex-wrap: wrap; gap: 28px; margin: 18px 0; }
+.stat b { display: block; font-family: var(--display); font-weight: 400; font-size: 2.4rem; line-height: 1; color: var(--accent); font-variant-numeric: tabular-nums; }
+.stat span { font-size: .85rem; color: var(--muted); }
+.plist { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 32px; }
+.plist li { padding: 16px 0; border-top: 1px solid var(--line); }
+.phead { display: flex; justify-content: space-between; align-items: baseline; gap: 4px 16px; flex-wrap: wrap; }
+.plist a.ptitle { color: var(--fg); text-decoration: none; font-weight: 600; }
+.plist a.ptitle:hover { color: var(--accent); }
+.plist p { font-size: .95rem; color: var(--muted); margin: 4px 0 6px; }
+.stack { font-family: var(--mono); font-size: .72rem; color: var(--accent); }
+
+/* skills */
+.skills { display: grid; grid-template-columns: 130px minmax(0, 1fr); gap: 12px 24px; margin: 0; }
+.skills dt { font-family: var(--mono); font-size: .8rem; color: var(--muted); padding-top: 3px; }
+.skills dd { margin: 0; }
+
+/* contact */
+.contact-row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-top: 8px; }
+.email { font-family: var(--mono); font-size: 1rem; padding: 10px 14px; border-radius: 8px; background: var(--accent-soft); color: var(--fg); user-select: all; }
+footer { padding-block: 32px 48px; border-top: 1px solid var(--line); }
+footer .wrap { font-family: var(--mono); font-size: .75rem; color: var(--muted); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+
+@media (max-width: 760px) {
+  .hero { padding-block: 24px 48px; }
+  .hero .wrap { grid-template-columns: minmax(0, 1fr); gap: 36px; }
+  .figure { order: -1; flex-direction: row; align-items: center; gap: 16px; justify-content: flex-start; }
+  .portrait { width: 96px; height: 96px; font-size: 2.2rem; }
+  .rdm { width: 96px; }
+  .figcap { display: none; }
+  section { padding-block: 44px; }
+  section .wrap { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+  .plist { grid-template-columns: minmax(0, 1fr); }
+  .skills { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+  .skills dd { margin-bottom: 12px; }
+  nav ul { gap: 14px; }
+}
+.pull { font-family: var(--display); font-size: 1.6rem; line-height: 1.3; color: var(--fg); margin: 0 0 24px; max-width: 34ch; text-wrap: balance; }
+.pull em { color: var(--accent); }
+.papers { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; margin-top: 16px; }
+.paper { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 22px; display: flex; flex-direction: column; gap: 10px; }
+.paper .ref { font-family: var(--mono); font-size: .72rem; color: var(--muted); letter-spacing: .03em; }
+.paper h3 a { color: var(--fg); text-decoration: none; }
+.paper h3 a:hover { color: var(--accent); }
+.paper p { font-size: .97rem; margin: 0; }
+.subhead { font-family: var(--mono); font-size: .78rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 36px 0 0; }
+.entries.compact { gap: 26px; }
+.entry > p { margin: 8px 0 0; }
+@media (max-width: 760px) { .papers { grid-template-columns: minmax(0, 1fr); } .pull { font-size: 1.35rem; } }
+.hobbies { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.hobby.running { grid-column: 1 / -1; }
+.races { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 32px; }
+.races li { display: grid; grid-template-columns: 3.2em minmax(0, 1fr) auto; gap: 12px; align-items: baseline; padding: 8px 0; border-top: 1px solid var(--line); font-size: .95rem; }
+.races .ry, .races .rd { font-family: var(--mono); font-size: .75rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.races .rd { color: var(--accent); }
+.races .rl { display: block; font-family: var(--mono); font-size: .72rem; color: var(--muted); margin-top: 2px; }
+.hobby { border: 1px solid var(--line); border-radius: 14px; padding: 22px; display: flex; flex-direction: column; gap: 8px; }
+.hobby svg { width: 26px; height: 26px; fill: var(--accent); }
+.hobby p:not(.wip):not(.subhead) { font-size: .95rem; margin: 0; }
+.tags { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+.tags li { font-size: .85rem; padding: 3px 10px; border-radius: 999px; background: var(--accent-soft); color: var(--fg); }
+.books { list-style: none; margin: 0; padding: 0; }
+.books li { padding: 7px 0; border-top: 1px solid var(--line); font-size: .92rem; line-height: 1.35; }
+.books .bt { display: block; }
+.books .ba { display: block; font-family: var(--mono); font-size: .72rem; color: var(--muted); margin-top: 2px; }
+.hlink { margin-top: auto; padding-top: 4px; font-family: var(--mono); font-size: .8rem; text-decoration: none; }
+.hlink:hover { text-decoration: underline; }
+.wip { margin: 0; font-family: var(--mono); font-size: .75rem; letter-spacing: .04em; color: var(--muted); }
+.wip::before { content: ""; display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--muted); margin-right: 8px; vertical-align: 1px; }
+@media (max-width: 760px) { .hobbies { grid-template-columns: minmax(0, 1fr); } .races { grid-template-columns: minmax(0, 1fr); } }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="mark" href="#top">A<span>.</span>N</a>
+    <ul>
+      <li><a href="#about">about</a></li>
+      <li><a href="#research">research</a></li>
+      <li><a href="#experience">experience</a></li>
+      <li><a href="#education">education</a></li>
+      <li><a href="#projects">projects</a></li>
+      <li><a href="#hobbies">hobbies</a></li>
+      <li><a href="#contact">contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="wrap">
+    <div>
+      <p class="eyebrow">AI × Neuroscience</p>
+      <h1>Alessio <em>Novel</em></h1>
+      <p class="lede">My research interests lie in using <strong>machine learning</strong> to get a deeper knowledge of the functioning of the <strong>human brain</strong> and to improve the technologies that use it as an interface.</p>
+      <div class="actions">
+        <a class="btn primary" href="Alessio_Novel_CV.pdf" target="_blank" rel="noopener">Download CV</a>
+        <a class="btn" href="https://github.com/alessionovel" target="_blank" rel="noopener">
+          <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+          GitHub</a>
+        <a class="btn" href="https://www.linkedin.com/in/AlessioNovel" target="_blank" rel="noopener">
+          <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M0 1.15C0 .52.52 0 1.18 0h13.64C15.48 0 16 .52 16 1.15v13.7c0 .63-.52 1.15-1.18 1.15H1.18C.52 16 0 15.48 0 14.85V1.15zM4.75 13.4V6.17H2.35v7.23h2.4zM3.55 5.18c.84 0 1.36-.56 1.36-1.26-.01-.71-.52-1.25-1.34-1.25-.82 0-1.36.54-1.36 1.25 0 .7.52 1.26 1.33 1.26h.01zm2.53 8.22h2.4V9.36c0-.21.02-.43.08-.58.17-.43.57-.88 1.24-.88.87 0 1.22.66 1.22 1.64v3.86h2.4V9.26c0-2.22-1.18-3.25-2.76-3.25-1.27 0-1.84.7-2.16 1.2v.02h-.02l.02-.02V6.17h-2.4c.03.68 0 7.23 0 7.23z"/></svg>
+          LinkedIn</a>
+      </div>
+    </div>
+    <div class="figure">
+      <div class="portrait" ><img src="photo.jpg" alt="Portrait of Alessio Novel" width="600" height="600"></div>
+      <div class="rdm" id="rdm" aria-hidden="true"></div>
+      <div class="figcap">representational dissimilarity matrix</div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section id="about">
+    <div class="wrap">
+      <div class="label">About</div>
+      <div class="content">
+        <p class="pull">“Helping others is the way we <em>help ourselves</em>.”</p>
+        <p>My main objective since I started my academic career has been to apply technology in order to help people. I come from a Bachelor's degree in Computer Science, in which I actually discovered and created this strong passion I have for Artificial Intelligence, and which taught me to approach projects and problem-solving with a logic-driven and efficiency-focused mindset.</p>
+        <p>During my Master's in Artificial Intelligence I was among the few students who chose the neuroscientific track, and I had the nice opportunity to follow some courses at the neuroscience department, which greatly increased my interest in the field. I chose this path because I am really curious about understanding the human brain and developing applications that analyze its activity and use it as an interface.</p>
+        <ul class="interests">
+          <li>Machine Learning</li>
+          <li>Computational Neuroscience</li>
+          <li>Deep Learning</li>
+          <li>Brain Decoding</li>
+          <li>Software Development</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="research">
+    <div class="wrap">
+      <div class="label">Research interests</div>
+      <div class="content">
+        <h2>Brain decoding</h2>
+        <p>The topic I'm aiming for the most is working with brain decoding techniques, which consist of applying machine learning algorithms to brain data (fMRI, EEG, MEG) in order to understand and interpret what a person is thinking or dreaming.</p>
+        <p>Brain decoding fascinates me from both a pure intellectual curiosity perspective and from a more tangible one, as there are many fields that benefit from this kind of research: from the more obvious goal of gaining a better understanding of how the human brain works, to the more practical application of brain-computer interfaces, that amongst many other advantages, allow people with disabilities to live a better life.</p>
+        <p class="subhead">Papers that shaped my interest</p>
+        <div class="papers">
+          <article class="paper">
+            <span class="ref">Shen, Horikawa, Majima &amp; Kamitani · PLoS Comput. Biol. 2019</span>
+            <h3><a href="https://doi.org/10.1371/journal.pcbi.1006633" target="_blank" rel="noopener">Deep image reconstruction from human brain activity</a></h3>
+            <p>The work that has brought me to this interest, because it was the first one I encountered that was actually able to reconstruct from the brain activity images of what people were seeing or even imagining in their minds.</p>
+          </article>
+          <article class="paper">
+            <span class="ref">Kriegeskorte &amp; Kievit · Trends Cogn. Sci. 2013</span>
+            <h3><a href="https://doi.org/10.1016/j.tics.2013.06.007" target="_blank" rel="noopener">Representational geometry: integrating cognition, computation, and the brain</a></h3>
+            <p>Kriegeskorte's work on representational similarity analysis really changed how comparisons between artificial and biological neural networks are performed. I really like this study for the simplicity and straightforwardness of the method he introduced, while being really effective and powerful, making easy and fast the comparison between all types of representation systems.</p>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="experience">
+    <div class="wrap">
+      <div class="label">Experience</div>
+      <div class="content entries">
+        <article class="entry">
+          <div class="entry-head">
+            <h3>Computational Neuroscience &amp; AI Research Intern</h3>
+            <span class="when"><span class="now" aria-hidden="true"></span>Aug 2026 – present</span>
+          </div>
+          <div class="where"><b>CAIAN (Centre for AI and Neuroscience), University of Bonn</b> · Bonn, Germany · Erasmus+ Internship</div>
+          <ul>
+            <li>Conducting research on <strong>representational alignment</strong> within a global multi-lab collaboration collecting the largest single-trial fMRI dataset on <strong>fear conditioning</strong>, supervised by Prof. Dr. Dr. Dominik Bach and Dr. Jurjen Heij.</li>
+            <li>Preprocessing fMRI brain imaging data and building geometric analysis pipelines to evaluate human neural representations of fear responses.</li>
+            <li>Designing and training brain-inspired Recurrent Neural Networks with Reinforcement Learning to model fear conditioning learning and compare artificial vs. biological neural representations.</li>
+          </ul>
+          <span class="stack" style="margin-top:4px">Python</span>
+        </article>
+        <article class="entry">
+          <div class="entry-head">
+            <h3>Software Developer Intern</h3>
+            <span class="when">Feb 2024 – Jun 2024</span>
+          </div>
+          <div class="where"><b>KnowDive Group, University of Trento</b> · Trento, Italy</div>
+          <ul>
+            <li>Contributed to <strong>KarmaLinker</strong>, a software for semantic data integration that builds multilingual Knowledge Graphs following the iTelos methodology, making data shareable and reusable.</li>
+            <li>Developed new features, such as multilingual concept descriptions and language selection through the SCROLL API, and wrote the documentation of the backend APIs using the OpenAPI standard.</li>
+          </ul>
+          <span class="stack" style="margin-top:4px">Java · JavaScript · OpenAPI</span>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="education">
+    <div class="wrap">
+      <div class="label">Education</div>
+      <div class="content entries">
+        <article class="entry">
+          <div class="entry-head">
+            <h3>M.Sc. in Artificial Intelligence Systems</h3>
+            <span class="when">Sep 2024 – present</span>
+          </div>
+          <div class="where"><b>University of Trento</b> · Neuroscience track (Neurocognitive Architectures)</div>
+          <ul>
+            <li><strong>Key courses:</strong> Machine Learning, Deep Learning, Computer Vision, Natural Language Understanding, Foundations of Cognitive Psychology and Neuroscience, Neuroimaging for Data Science, Language and Social Cognition.</li>
+          </ul>
+          <div class="grade">GPA <b>28.8</b>/30</div>
+        </article>
+        <article class="entry">
+          <div class="entry-head">
+            <h3>B.Sc. in Computer Science</h3>
+            <span class="when">Sep 2021 – Jul 2024</span>
+          </div>
+          <div class="where"><b>University of Trento</b></div>
+          <ul>
+            <li><strong>Key courses:</strong> Algorithms and Data Structures, Databases, Networking, Computer and Network Security, Machine Learning, Human-Computer Interaction, Information Systems.</li>
+          </ul>
+          <div class="grade"><b>110</b>/110 with honors</div>
+        </article>
+        <article class="entry">
+          <div class="entry-head">
+            <h3>Secondary School Diploma in Computer Science</h3>
+            <span class="when">Sep 2016 – Jun 2021</span>
+          </div>
+          <div class="where"><b>Istituto Tecnico Statale A. Volta</b> · Trieste, Italy</div>
+          <div class="grade"><b>100</b>/100</div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="projects">
+    <div class="wrap">
+      <div class="label">Projects</div>
+      <div class="content">
+        <div class="featured">
+          <div class="tag">Deep Learning · Vision-language models</div>
+          <div class="phead"><h3><a href="https://github.com/alessionovel/DL-project" target="_blank" rel="noopener">Few-Shot CLIP Adaptation (Flowers102 dataset)</a></h3><span class="when">2026</span></div>
+          <div class="stats">
+            <div class="stat"><b>+11.49%</b><span>base accuracy (66.92% → 78.41%)</span></div>
+            <div class="stat"><b>+5.75%</b><span>harmonic mean vs. zero-shot</span></div>
+          </div>
+          <p>Developed and compared new few-shot learning strategies (based on CoOp) to adapt the CLIP vision-language model for fine-grained classification on the Oxford Flowers102 dataset. The goal was to improve accuracy using only 10 samples for half of the classes, while not having samples for the other half, minimizing degradation on novel class performance.</p>
+          <span class="stack">Python</span>
+        </div>
+        <ul class="plist">
+          <li>
+            <div class="phead"><a class="ptitle" href="https://github.com/alessionovel/NLU-project" target="_blank" rel="noopener">NLU Project</a><span class="when">2026</span></div>
+            <p>Project for the Natural Language Understanding university course, made of two parts: Language Modeling tasks and Natural Language Understanding tasks.</p>
+            <span class="stack">Python</span>
+          </li>
+          <li>
+            <div class="phead"><a class="ptitle" href="https://github.com/alessionovel/SemanticsAndCognition" target="_blank" rel="noopener">Semantics and Cognition</a><span class="when">2026</span></div>
+            <p>The project proposal I wrote for the Semantics and Cognition university course.</p>
+            <span class="stack">Research proposal</span>
+          </li>
+          <li>
+            <div class="phead"><a class="ptitle" href="https://github.com/alessionovel/PhotoSwipe" target="_blank" rel="noopener">PhotoSwipe</a><span class="when">2026</span></div>
+            <p>An iOS application that allows users to free up space on their devices by reviewing photos and videos using a Tinder-like interface, one day of past years at a time.</p>
+            <span class="stack">Swift</span>
+          </li>
+          <li>
+            <div class="phead"><a class="ptitle" href="https://github.com/alessionovel/llm-fact-checker" target="_blank" rel="noopener">LLM Fact Checker</a><span class="when">2025</span></div>
+            <p>A benchmarking pipeline to evaluate LLM fact-checking, designed to analyze behaviors across different prompts and models. Includes an R analysis script that measures principal statistical metrics.</p>
+            <span class="stack">Python · R</span>
+          </li>
+          <li>
+            <div class="phead"><a class="ptitle" href="https://github.com/alessionovel/volleymap" target="_blank" rel="noopener">VolleyMap</a><span class="when">2025</span></div>
+            <p>Recognizes key elements in volleyball match footage (particularly the referee) using only traditional signal processing techniques, without any AI or machine learning.</p>
+            <span class="stack">Python</span>
+          </li>
+          <li>
+            <div class="phead"><a class="ptitle" href="https://github.com/alessionovel/saveTheMeal" target="_blank" rel="noopener">SaveTheMeal</a><span class="when">2023</span></div>
+            <p>A website to prevent food waste, enabling businesses to sell soon-to-expire food at a discounted price. Built on JSON-based APIs to facilitate its expansion to other systems in the future.</p>
+            <span class="stack">HTML/CSS/JS · Node.js · MongoDB · Swagger</span>
+          </li>
+          <li>
+            <div class="phead"><a class="ptitle" href="https://github.com/alessionovel/smartMarkets" target="_blank" rel="noopener">SmartMarkets</a><span class="when">2021</span></div>
+            <p>A website to save supermarket users' time, money, and distance, with product data retrieved from external APIs.</p>
+            <span class="stack">PHP · Vue.js · jQuery/Ajax · MySQLi</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="events">
+    <div class="wrap">
+      <div class="label">Schools &amp; events</div>
+      <div class="content entries compact">
+        <article class="entry">
+          <div class="entry-head"><h3>Participant · M2L Summer School</h3><span class="when">Sep 2024</span></div>
+          <div class="where">Milan, Italy</div>
+          <ul><li>Selected among 519 applicants (34% acceptance rate) for an immersive Machine Learning summer school. Engaged with industry experts on advanced AI topics through intensive technical lectures, workshops, and networking sessions.</li></ul>
+        </article>
+        <article class="entry">
+          <div class="entry-head"><h3>Participant · Trieste Next Academy</h3><span class="when">Sep 2024</span></div>
+          <div class="where">Trieste Next – Festival of Scientific Research · Trieste, Italy</div>
+          <ul><li>Selected for a scholarship to take part in the Trieste Next Academy, an initiative for university students interested in innovation and scientific research, following a selected 3-day programme of activities at the festival.</li></ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="activities">
+    <div class="wrap">
+      <div class="label">Volunteering</div>
+      <div class="content entries compact">
+        <article class="entry">
+          <div class="entry-head"><h3>Technology Volunteer · Olympic Winter Games Milano Cortina 2026</h3><span class="when">Jul 2025 – Feb 2026</span></div>
+          <div class="where">Tesero, Italy</div>
+          <ul><li>After specialized training, I managed IT setup and connectivity for media and staff at the Cross-Country Skiing venue, overseeing device distribution and network support.</li></ul>
+        </article>
+        <article class="entry">
+          <div class="entry-head"><h3>Blood Donor · AVIS</h3><span class="when">Feb 2025 – present</span></div>
+          <div class="where">Associazione Volontari Italiani del Sangue (Italian Blood Volunteers Association)</div>
+          <ul><li>Member of AVIS and blood donor.</li></ul>
+        </article>
+        <article class="entry">
+          <div class="entry-head"><h3>Contributor · Shared Course Material Initiative</h3><span class="when">Sep 2021 – Sep 2026</span></div>
+          <div class="where">University of Trento</div>
+          <ul><li>Collaborated on a student-led repository by authoring detailed lecture notes and solutions to past exam exercises, and auditing existing content to ensure accuracy and clarity for peer learning.</li></ul>
+        </article>
+        <article class="entry">
+          <div class="entry-head"><h3>Volunteer · Poplar Festival</h3><span class="when">Sep 2023 – Sep 2025</span></div>
+          <div class="where">Trento, Italy</div>
+          <ul><li>Assisted in the preparation and execution of the Poplar Festival, a music festival in Trento.</li></ul>
+        </article>
+        <article class="entry">
+          <div class="entry-head"><h3>Volunteer · Aquila Basket Trento</h3><span class="when">Feb 2023</span></div>
+          <div class="where">Trento, Italy</div>
+          <ul><li>Assisted in the organization and execution of the NextGen basketball tournament organized by Lega Basket A.</li></ul>
+        </article>
+        <article class="entry">
+          <div class="entry-head"><h3>Volunteer · Pallacanestro Interclub Muggia</h3><span class="when">2015 – 2019</span></div>
+          <div class="where">Muggia, Italy</div>
+          <ul><li>Assisted in the organization and execution of the summer MiniBasket tournament Muggiaestate.</li></ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="skills">
+    <div class="wrap">
+      <div class="label">Skills</div>
+      <div class="content">
+        <dl class="skills">
+          <dt>Programming</dt><dd>Python, C++, Java, R</dd>
+          <dt>Back-end</dt><dd>PHP, REST API, MySQL, PostgreSQL, MongoDB</dd>
+          <dt>Front-end</dt><dd>HTML5, CSS3, JavaScript</dd>
+          <dt>DevOps</dt><dd>Git, Conda, Docker, CMake</dd>
+          <dt>Languages</dt><dd>Italian (native), English</dd>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <section id="hobbies">
+    <div class="wrap">
+      <div class="label">Hobbies</div>
+      <div class="content">
+        <div class="hobbies">
+          <article class="hobby running">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13.5 5.5a2 2 0 1 0 0-4 2 2 0 0 0 0 4zM9.8 8.9 7 23h2.1l1.8-8 2.1 2v6h2v-7.5l-2.1-2 .6-3A7.3 7.3 0 0 0 19 13v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1L6 8.3V13h2V9.6l1.8-.7"/></svg>
+            <h3>Running</h3>
+            <p>I consider it very important to balance work with sports and outdoor activities, which is why I regularly keep fit and every now and then take part in a race.</p>
+            <p class="subhead" style="margin-top:8px">Races</p>
+            <ul class="races">
+              <li><span class="ry">2026</span><span class="rn">Tzimbar Race<span class="rl">Verona, Italy</span></span><span class="rd">15 km trail</span></li>
+              <li><span class="ry">2026</span><span class="rn">Grubla Trail<span class="rl">Trieste, Italy</span></span><span class="rd">14 km trail</span></li>
+              <li><span class="ry">2026</span><span class="rn">XTERRA Croatia Mali Lošinj Trail Run<span class="rl">Primorje-Gorski Kotar, Croatia</span></span><span class="rd">16 km trail</span></li>
+              <li><span class="ry">2026</span><span class="rn">Trieste Spring Run – Half Marathon<span class="rl">Trieste, Italy</span></span><span class="rd">21.1 km</span></li>
+              <li><span class="ry">2026</span><span class="rn">Mujalonga Sul Mar<span class="rl">Trieste, Italy</span></span><span class="rd">10 km</span></li>
+              <li><span class="ry">2025</span><span class="rn">Palermo International Half Marathon<span class="rl">Palermo, Italy</span></span><span class="rd">21.1 km</span></li>
+              <li><span class="ry">2025</span><span class="rn">Trento Half Marathon<span class="rl">Trento, Italy</span></span><span class="rd">21.1 km</span></li>
+              <li><span class="ry">2025</span><span class="rn">Reschenseelauf – Lake Resia Run<span class="rl">Bolzano, Italy</span></span><span class="rd">15 km</span></li>
+              <li><span class="ry">2025</span><span class="rn">Transaltina Trail<span class="rl">Belluno, Italy</span></span><span class="rd">11 km trail</span></li>
+              <li><span class="ry">2025</span><span class="rn">Trieste Spring Run – Half Marathon<span class="rl">Trieste, Italy</span></span><span class="rd">21.1 km</span></li>
+              <li><span class="ry">2025</span><span class="rn">Mujalonga Sul Mar<span class="rl">Trieste, Italy</span></span><span class="rd">10 km</span></li>
+              <li><span class="ry">2023</span><span class="rn">Trento Half Marathon<span class="rl">Trento, Italy</span></span><span class="rd">21.1 km</span></li>
+            </ul>
+            <a class="hlink" href="https://www.strava.com/athletes/163430304" target="_blank" rel="noopener">Strava profile →</a>
+          </article>
+          <article class="hobby">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 3H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h5v2h8v-2h5c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 14H3V5h18v12z"/></svg>
+            <h3>TV series &amp; films</h3>
+            <p>I really like to relax and entertain myself by watching films and TV series of every kind.</p>
+            <p class="subhead" style="margin-top:4px">Favourite series</p>
+            <ul class="tags"><li>Ted Lasso</li><li>Stranger Things</li><li>Snowpiercer</li><li>The Studio</li><li>Shrinking</li><li>Prison Break</li></ul>
+            <p class="subhead" style="margin-top:8px">Favourite films</p>
+            <ul class="tags"><li>Space Jam</li><li>Back to the Future</li><li>The Odyssey</li><li>The Matrix</li><li>The Hangover</li><li>Grown Ups</li><li>American Pie</li></ul>
+            <a class="hlink" href="https://www.sofatime.app/profile/alessionovel" target="_blank" rel="noopener">Sofa Time profile →</a>
+          </article>
+          <article class="hobby">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 5c-1.1-.4-2.3-.5-3.5-.5-1.9 0-4 .4-5.5 1.5-1.5-1.1-3.6-1.5-5.5-1.5S2.5 4.9 1 6v14.6c0 .3.3.5.5.5.1 0 .2 0 .3-.1C3.1 20.4 5 20 6.5 20c1.9 0 4 .4 5.5 1.5 1.3-.8 3.7-1.5 5.5-1.5 1.7 0 3.5.3 4.9 1.1.1.1.2.1.3.1.3 0 .5-.3.5-.5V6c-.6-.5-1.3-.8-2-1zm0 13.5c-1.1-.3-2.3-.5-3.5-.5-1.7 0-4.1.6-5.5 1.5V8c1.4-.9 3.8-1.5 5.5-1.5 1.2 0 2.4.2 3.5.5v11.5z"/></svg>
+            <h3>Reading</h3>
+            <p>To avoid being always glued to screens, I dedicate myself to reading on public transport or when I go out for some fresh air at the park or by the sea. Here too I like to vary between different genres, as you can see from my favourite books.</p>
+            <p class="subhead" style="margin-top:4px">Favourite books</p>
+            <ul class="books"><li><span class="bt">The Girl with Seven Names: A North Korean Defector's Story</span><span class="ba">Hyeonseo Lee</span></li><li><span class="bt">One, No One and One Hundred Thousand</span><span class="ba">Luigi Pirandello</span></li><li><span class="bt">The Master and Margarita</span><span class="ba">Mikhail Bulgakov</span></li><li><span class="bt">The Odyssey</span><span class="ba">Homer</span></li><li><span class="bt">The Little Prince</span><span class="ba">Antoine de Saint-Exupéry</span></li><li><span class="bt">The Prince and the Pauper</span><span class="ba">Mark Twain</span></li><li><span class="bt">Storia di Trieste. Dalle origini ai nostri giorni</span><span class="ba">Nicolò Giraldi</span></li></ul>
+            <a class="hlink" href="https://www.goodreads.com/user/show/187664309" target="_blank" rel="noopener">Goodreads profile →</a>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="wrap">
+      <div class="label">Contact</div>
+      <div class="content">
+        <h2>Get in touch</h2>
+        <p>I'm looking for a PhD position that brings together the two fields I want to do research in: Artificial Intelligence and Neuroscience. For any opportunity, opinion or exchange of ideas, feel free to contact me!</p>
+        <div class="contact-row">
+          <span class="email" id="email">alessionovel@gmail.com</span>
+          <button class="btn" id="copy" type="button">Copy email</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 Alessio Novel</span>
+    <span>Trieste</span>
+  </div>
+</footer>
+
+<script>
+// Draw a small symmetric dissimilarity matrix with two block clusters, like an RSA plot.
+(function () {
+  var el = document.getElementById('rdm'); if (!el) return;
+  var n = 12, seed = 7;
+  function rnd() { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; }
+  var m = [];
+  for (var i = 0; i < n; i++) { m[i] = []; }
+  for (var i = 0; i < n; i++) for (var j = i; j < n; j++) {
+    var same = (i < 5) === (j < 5) && !((i >= 5 && i < 9) !== (j >= 5 && j < 9));
+    var v = i === j ? 0 : (same ? 0.15 + rnd() * 0.25 : 0.55 + rnd() * 0.45);
+    m[i][j] = m[j][i] = v;
+  }
+  var frag = document.createDocumentFragment();
+  for (var i = 0; i < n; i++) for (var j = 0; j < n; j++) {
+    var c = document.createElement('i');
+    c.style.opacity = (1 - m[i][j] * 0.85).toFixed(2);
+    frag.appendChild(c);
+  }
+  el.appendChild(frag);
+})();
+
+document.getElementById('copy').addEventListener('click', function () {
+  var btn = this, text = document.getElementById('email').textContent;
+  function done() { btn.textContent = 'Copied'; setTimeout(function () { btn.textContent = 'Copy email'; }, 1800); }
+  function fallback() { var r = document.createRange(); r.selectNodeContents(document.getElementById('email')); var s = getSelection(); s.removeAllRanges(); s.addRange(r); btn.textContent = 'Press ⌘C to copy'; }
+  try { navigator.clipboard.writeText(text).then(done, fallback); } catch (e) { fallback(); }
+});
+</script>
+</body>
+</html>
