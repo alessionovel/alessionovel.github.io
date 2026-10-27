@@ -113,7 +113,9 @@ p { margin: 0 0 1em; max-width: 65ch; }
 /* timeline entries */
 .entries { display: flex; flex-direction: column; gap: 40px; }
 .entry { display: grid; grid-template-columns: minmax(0, 1fr); gap: 6px; }
-.entry-head { display: flex; justify-content: space-between; align-items: baseline; gap: 6px 20px; flex-wrap: wrap; }
+.entry-head { display: flex; justify-content: space-between; align-items: baseline; gap: 6px 20px; flex-wrap: nowrap; }
+.entry-head h3 { flex: 1 1 auto; min-width: 0; }
+@media (max-width: 560px) { .entry-head { flex-wrap: wrap; } }
 .when { font-family: var(--mono); font-size: .8rem; color: var(--muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
 .where { color: var(--muted); font-size: .98rem; }
 .where b { color: var(--fg); font-weight: 500; }
@@ -249,8 +251,7 @@ footer .wrap { font-family: var(--mono); font-size: .75rem; color: var(--muted);
       <div class="label">About</div>
       <div class="content">
         <p class="pull">“Helping others is the way we <em>help ourselves</em>.”</p>
-        <p>My main objective since I started my academic career has been to apply technology in order to help people. I come from a Bachelor's degree in Computer Science, in which I actually discovered and created this strong passion I have for Artificial Intelligence, and which taught me to approach projects and problem-solving with a logic-driven and efficiency-focused mindset.</p>
-        <p>During my Master's in Artificial Intelligence I was among the few students who chose the neuroscientific track, and I had the nice opportunity to follow some courses at the neuroscience department, which greatly increased my interest in the field. I chose this path because I am really curious about understanding the human brain and developing applications that analyze its activity and use it as an interface.</p>
+        <p>I am a Master's student in Artificial Intelligence, and my research interests and goals lie at the intersection of AI and Neuroscience. After a Bachelor's degree in Computer Science, I chose the neuroscience track of my Master's, which gave me the opportunity to attend courses at the neuroscience department. What drives me is a deep curiosity to understand how the human brain works and an ambition to develop brain-based technologies.</p>
         <ul class="interests">
           <li>Machine Learning</li>
           <li>Computational Neuroscience</li>
@@ -267,19 +268,19 @@ footer .wrap { font-family: var(--mono); font-size: .75rem; color: var(--muted);
       <div class="label">Research interests</div>
       <div class="content">
         <h2>Brain decoding</h2>
-        <p>The topic I'm aiming for the most is working with brain decoding techniques, which consist of applying machine learning algorithms to brain data (fMRI, EEG, MEG) in order to understand and interpret what a person is thinking or dreaming.</p>
-        <p>Brain decoding fascinates me from both a pure intellectual curiosity perspective and from a more tangible one, as there are many fields that benefit from this kind of research: from the more obvious goal of gaining a better understanding of how the human brain works, to the more practical application of brain-computer interfaces, that amongst many other advantages, allow people with disabilities to live a better life.</p>
+        <p>My primary focus is brain decoding, which involves interpreting what a person is perceiving, thinking, or dreaming directly from their brain activity, with the ultimate goal of leveraging these technologies to build tools that help patients recover lost functions and overcome physical and communicative barriers.</p>
+        <p>In practice, this means applying machine learning algorithms to brain data such as fMRI, EEG and MEG. It fascinates me both as a way to gain a deeper understanding of how the human brain works and for its practical applications, such as brain-computer interfaces.</p>
         <p class="subhead">Papers that shaped my interest</p>
         <div class="papers">
           <article class="paper">
             <span class="ref">Shen, Horikawa, Majima &amp; Kamitani · PLoS Comput. Biol. 2019</span>
             <h3><a href="https://doi.org/10.1371/journal.pcbi.1006633" target="_blank" rel="noopener">Deep image reconstruction from human brain activity</a></h3>
-            <p>The work that has brought me to this interest, because it was the first one I encountered that was actually able to reconstruct from the brain activity images of what people were seeing or even imagining in their minds.</p>
+            <p>This study fascinated me because it was the first I encountered that aimed to reconstruct images directly from brain activity (fMRI).</p>
           </article>
           <article class="paper">
             <span class="ref">Kriegeskorte &amp; Kievit · Trends Cogn. Sci. 2013</span>
             <h3><a href="https://doi.org/10.1016/j.tics.2013.06.007" target="_blank" rel="noopener">Representational geometry: integrating cognition, computation, and the brain</a></h3>
-            <p>Kriegeskorte's work on representational similarity analysis really changed how comparisons between artificial and biological neural networks are performed. I really like this study for the simplicity and straightforwardness of the method he introduced, while being really effective and powerful, making easy and fast the comparison between all types of representation systems.</p>
+            <p>Kriegeskorte introduced and formalized representational similarity analysis (RSA), which is now widely used to compare different representational systems. I am particularly interested in applying RSA to compare representations in the brain and in artificial neural networks.</p>
           </article>
         </div>
       </div>
@@ -394,7 +395,7 @@ footer .wrap { font-family: var(--mono); font-size: .75rem; color: var(--muted);
           </li>
           <li>
             <div class="phead"><a class="ptitle" href="https://github.com/alessionovel/volley-map" target="_blank" rel="noopener">VolleyMap</a><span class="when">2025</span></div>
-            <p>Detects the court, the net and the referee area in volleyball broadcast frames using only classical image processing (K-means, morphology, Hough transform), without neural networks.</p>
+            <p>Detects the court, the net and the referee area in volleyball broadcast frames using only classical image processing (K-means, morphology, Hough transform), without deep learning.</p>
             <span class="stack">Python · OpenCV</span>
           </li>
           <li>
@@ -447,7 +448,8 @@ footer .wrap { font-family: var(--mono); font-size: .75rem; color: var(--muted);
         <article class="entry">
           <div class="entry-head"><h3>Contributor · Shared Course Material Initiative</h3><span class="when">Sep 2021 – Sep 2026</span></div>
           <div class="where">University of Trento</div>
-          <ul><li>Collaborated on a student-led repository by authoring detailed lecture notes and solutions to past exam exercises, and auditing existing content to ensure accuracy and clarity for peer learning.</li></ul>
+          <ul><li>Collaborated on a student-led repository by authoring detailed lecture notes and solutions to past exam exercises, and auditing existing content to ensure accuracy and clarity for peer learning.</li>
+            <li>My material: <a href="https://github.com/alessionovel/bachelor-computer-science" target="_blank" rel="noopener">B.Sc. in Computer Science</a> · <a href="https://github.com/alessionovel/master-artificial-intelligence" target="_blank" rel="noopener">M.Sc. in Artificial Intelligence</a></li></ul>
         </article>
         <article class="entry">
           <div class="entry-head"><h3>Volunteer · Poplar Festival</h3><span class="when">Sep 2023 – Sep 2025</span></div>
@@ -487,11 +489,11 @@ footer .wrap { font-family: var(--mono); font-size: .75rem; color: var(--muted);
     <div class="wrap">
       <div class="label">Hobbies</div>
       <div class="content">
+        <p>I like to dedicate my free time to a variety of hobbies, which help me grow from different perspectives and recharge my mind. My main hobbies are travelling, running, watching TV series and films, and reading.</p>
         <div class="hobbies">
           <article class="hobby running">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13.5 5.5a2 2 0 1 0 0-4 2 2 0 0 0 0 4zM9.8 8.9 7 23h2.1l1.8-8 2.1 2v6h2v-7.5l-2.1-2 .6-3A7.3 7.3 0 0 0 19 13v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1L6 8.3V13h2V9.6l1.8-.7"/></svg>
             <h3>Running</h3>
-            <p>I consider it very important to balance work with sports and outdoor activities, which is why I regularly keep fit and every now and then take part in a race.</p>
             <p class="subhead" style="margin-top:8px">Races</p>
             <ul class="races">
               <li><span class="ry">2026</span><span class="rn">Tzimbar Race<span class="rl">Verona, Italy</span></span><span class="rd">15 km trail</span></li>
@@ -512,7 +514,6 @@ footer .wrap { font-family: var(--mono); font-size: .75rem; color: var(--muted);
           <article class="hobby">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 3H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h5v2h8v-2h5c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 14H3V5h18v12z"/></svg>
             <h3>TV series &amp; films</h3>
-            <p>I really like to relax and entertain myself by watching films and TV series of every kind.</p>
             <p class="subhead" style="margin-top:4px">Favourite series</p>
             <ul class="tags"><li>Ted Lasso</li><li>Stranger Things</li><li>Snowpiercer</li><li>The Studio</li><li>Shrinking</li><li>Prison Break</li></ul>
             <p class="subhead" style="margin-top:8px">Favourite films</p>
@@ -522,7 +523,6 @@ footer .wrap { font-family: var(--mono); font-size: .75rem; color: var(--muted);
           <article class="hobby">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 5c-1.1-.4-2.3-.5-3.5-.5-1.9 0-4 .4-5.5 1.5-1.5-1.1-3.6-1.5-5.5-1.5S2.5 4.9 1 6v14.6c0 .3.3.5.5.5.1 0 .2 0 .3-.1C3.1 20.4 5 20 6.5 20c1.9 0 4 .4 5.5 1.5 1.3-.8 3.7-1.5 5.5-1.5 1.7 0 3.5.3 4.9 1.1.1.1.2.1.3.1.3 0 .5-.3.5-.5V6c-.6-.5-1.3-.8-2-1zm0 13.5c-1.1-.3-2.3-.5-3.5-.5-1.7 0-4.1.6-5.5 1.5V8c1.4-.9 3.8-1.5 5.5-1.5 1.2 0 2.4.2 3.5.5v11.5z"/></svg>
             <h3>Reading</h3>
-            <p>To avoid being always glued to screens, I dedicate myself to reading on public transport or when I go out for some fresh air at the park or by the sea. Here too I like to vary between different genres, as you can see from my favourite books.</p>
             <p class="subhead" style="margin-top:4px">Favourite books</p>
             <ul class="books"><li><span class="bt">The Girl with Seven Names: A North Korean Defector's Story</span><span class="ba">Hyeonseo Lee</span></li><li><span class="bt">One, No One and One Hundred Thousand</span><span class="ba">Luigi Pirandello</span></li><li><span class="bt">The Master and Margarita</span><span class="ba">Mikhail Bulgakov</span></li><li><span class="bt">The Odyssey</span><span class="ba">Homer</span></li><li><span class="bt">The Little Prince</span><span class="ba">Antoine de Saint-Exupéry</span></li><li><span class="bt">The Prince and the Pauper</span><span class="ba">Mark Twain</span></li><li><span class="bt">Storia di Trieste. Dalle origini ai nostri giorni</span><span class="ba">Nicolò Giraldi</span></li></ul>
             <a class="hlink" href="https://www.goodreads.com/user/show/187664309" target="_blank" rel="noopener">Goodreads profile →</a>
