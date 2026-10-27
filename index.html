@@ -91,9 +91,12 @@ h1 em { color: var(--accent); }
   overflow: hidden; border: 1px solid var(--line);
 }
 .portrait img { width: 100%; height: 100%; object-fit: cover; }
-.rdm { display: grid; grid-template-columns: repeat(12, 1fr); gap: 2px; width: 220px; max-width: 100%; }
-.rdm i { aspect-ratio: 1; border-radius: 2px; background: var(--accent); }
-.figcap { font-family: var(--mono); font-size: .68rem; color: var(--muted); letter-spacing: .04em; text-align: center; }
+.decode { display: block; width: 240px; max-width: 100%; height: auto; }
+.decode .v { fill: var(--accent); }
+.decode .sulcus { fill: none; stroke: var(--bg); stroke-linecap: round; }
+.decode .outline { fill: none; stroke: var(--accent); stroke-opacity: .25; }
+.decode .arrow { fill: none; stroke: var(--accent); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+.decode text { fill: var(--accent); font-family: var(--mono); font-size: 20px; }
 
 /* sections */
 section { padding-block: 56px; border-top: 1px solid var(--line); }
@@ -156,8 +159,8 @@ footer .wrap { font-family: var(--mono); font-size: .75rem; color: var(--muted);
   .hero .wrap { grid-template-columns: minmax(0, 1fr); gap: 36px; }
   .figure { order: -1; flex-direction: row; align-items: center; gap: 16px; justify-content: flex-start; }
   .portrait { width: 96px; height: 96px; font-size: 2.2rem; }
-  .rdm { width: 96px; }
-  .figcap { display: none; }
+  .decode { width: 170px; }
+  .decode text { display: none; }
   section { padding-block: 44px; }
   section .wrap { grid-template-columns: minmax(0, 1fr); gap: 12px; }
   .plist { grid-template-columns: minmax(0, 1fr); }
@@ -235,8 +238,7 @@ footer .wrap { font-family: var(--mono); font-size: .75rem; color: var(--muted);
     </div>
     <div class="figure">
       <div class="portrait" ><img src="photo.jpg" alt="Portrait of Alessio Novel" width="600" height="600"></div>
-      <div class="rdm" id="rdm" aria-hidden="true"></div>
-      <div class="figcap">representational dissimilarity matrix</div>
+      <svg class="decode" id="decode" viewBox="8 8 532 212" role="img" aria-label="Brain decoding: fMRI activity in the visual cortex is decoded into a reconstructed image"></svg>
     </div>
   </div>
 </header>
@@ -553,25 +555,62 @@ footer .wrap { font-family: var(--mono); font-size: .75rem; color: var(--muted);
 </footer>
 
 <script>
-// Draw a small symmetric dissimilarity matrix with two block clusters, like an RSA plot.
+// Brain decoding illustration: fMRI activity (voxels) -> decoder -> reconstructed image.
 (function () {
-  var el = document.getElementById('rdm'); if (!el) return;
-  var n = 12, seed = 7;
+  var svg = document.getElementById('decode'); if (!svg) return;
+  var NS = 'http://www.w3.org/2000/svg';
+  function add(tag, attrs) {
+    var e = document.createElementNS(NS, tag);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    svg.appendChild(e); return e;
+  }
+  var seed = 5;
   function rnd() { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; }
-  var m = [];
-  for (var i = 0; i < n; i++) { m[i] = []; }
-  for (var i = 0; i < n; i++) for (var j = i; j < n; j++) {
-    var same = (i < 5) === (j < 5) && !((i >= 5 && i < 9) !== (j >= 5 && j < 9));
-    var v = i === j ? 0 : (same ? 0.15 + rnd() * 0.25 : 0.55 + rnd() * 0.45);
-    m[i][j] = m[j][i] = v;
+
+  // Brain seen from the side (frontal lobe on the left), filled with voxels
+  var outline = 'M 40 150 C 18 120, 22 70, 60 45 C 95 20, 160 14, 205 30 C 250 46, 278 85, 274 125 ' +
+    'C 272 150, 258 165, 240 170 C 246 186, 232 200, 212 198 C 200 197, 192 192, 188 186 ' +
+    'L 182 214 L 168 214 L 170 182 C 150 186, 122 184, 106 174 C 90 184, 62 180, 52 166 ' +
+    'C 46 162, 42 157, 40 150 Z';
+  var mask = document.createElement('canvas'); mask.width = 600; mask.height = 260;
+  var mctx = mask.getContext('2d'), brain = new Path2D(outline);
+  var v = 7, gap = 1.4;
+  var blobs = [ { x: 252, y: 112, s: 26, a: 1.0 },    // occipital lobe: visual cortex
+                { x: 200, y: 158, s: 20, a: 0.55 },   // ventral temporal cortex
+                { x: 90,  y: 70,  s: 26, a: 0.18 } ];
+  for (var y = 10; y < 220; y += v) for (var x = 14; x < 284; x += v) {
+    var cx = x + v / 2, cy = y + v / 2;
+    if (!mctx.isPointInPath(brain, cx, cy)) continue;
+    var act = 0.10 + rnd() * 0.12;
+    for (var b = 0; b < blobs.length; b++) {
+      var B = blobs[b];
+      act += B.a * Math.exp(-((cx - B.x) * (cx - B.x) + (cy - B.y) * (cy - B.y)) / (2 * B.s * B.s));
+    }
+    add('rect', { x: x, y: y, width: v - gap, height: v - gap, rx: 1.4, 'class': 'v', 'fill-opacity': Math.min(0.95, act).toFixed(2) });
   }
-  var frag = document.createDocumentFragment();
+  // Sulci, drawn as gaps between the voxels
+  add('path', { d: 'M 98 150 C 130 138, 165 124, 205 116', 'class': 'sulcus', 'stroke-width': 3.2 });  // lateral fissure
+  add('path', { d: 'M 162 20 C 152 55, 150 80, 140 128', 'class': 'sulcus', 'stroke-width': 3.2 });   // central sulcus
+  add('path', { d: 'M 236 172 C 222 168, 200 170, 186 178', 'class': 'sulcus', 'stroke-width': 2.6 }); // cerebellum
+  add('path', { d: 'M 234 56 C 226 70, 228 84, 236 92', 'class': 'sulcus', 'stroke-width': 2.6 });    // parieto-occipital
+  add('path', { d: outline, 'class': 'outline' });
+
+  // Decoder arrow
+  add('path', { d: 'M 298 112 H 368 M 360 105 L 368 112 L 360 119', 'class': 'arrow' });
+  add('text', { x: 333, y: 96, 'text-anchor': 'middle' }).textContent = 'decoder';
+
+  // Reconstructed image: a pixelated, slightly noisy letter
+  var n = 12, p = 12, px0 = 384, py0 = 112 - n * p / 2;
+  var off = document.createElement('canvas'); off.width = off.height = n;
+  var o = off.getContext('2d');
+  o.font = 'bold 12px sans-serif'; o.textAlign = 'center'; o.textBaseline = 'middle';
+  o.fillText('A', n / 2, n / 2 + 0.5);
+  var data = o.getImageData(0, 0, n, n).data;
+  add('rect', { x: px0 - 5, y: py0 - 5, width: n * p + 10, height: n * p + 10, rx: 6, 'class': 'outline' });
   for (var i = 0; i < n; i++) for (var j = 0; j < n; j++) {
-    var c = document.createElement('i');
-    c.style.opacity = (1 - m[i][j] * 0.85).toFixed(2);
-    frag.appendChild(c);
+    var a = 0.06 + data[(i * n + j) * 4 + 3] / 255 * 0.85 + (rnd() - 0.5) * 0.16;
+    add('rect', { x: px0 + j * p, y: py0 + i * p, width: p - 1.2, height: p - 1.2, 'class': 'v', 'fill-opacity': Math.max(0.05, Math.min(0.95, a)).toFixed(2) });
   }
-  el.appendChild(frag);
 })();
 
 document.getElementById('copy').addEventListener('click', function () {
